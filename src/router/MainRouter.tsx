@@ -3,6 +3,8 @@ import {Route, Routes} from "react-router-dom";
 
 import LazyLoad from './LazyLoad';
 import BoardListPage from '../domain/board/page/BoardListPage';
+import BoardRegisterPage from "../domain/board/page/BoardRegisterPage";
+import BoardReadPage from "../domain/board/page/BoardReadPage";
 
 const MainRouters = () => {
     return (
@@ -11,6 +13,10 @@ const MainRouters = () => {
                 <Routes>
                     {/* 게시판 리스트 */}
                     <Route path="/" element={<BoardListPage />} />
+                    {/* 게시판 등록 페이지 */}
+                    <Route path="/register" element={<BoardRegisterPage />} />
+                    {/* 게시판 상세 페이지 */}
+                    <Route path="/read/:boardId" element={<BoardReadPage />} />
                 </Routes>
             </Suspense>
         </>

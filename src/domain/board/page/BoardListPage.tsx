@@ -43,15 +43,28 @@
 // export default BoardListPage;
 
 import React, { useEffect } from 'react';
-import { TableContainer, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Typography, CircularProgress } from '@mui/material';
+import {
+  TableContainer,
+  Container,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Button,
+  Paper,
+  Typography,
+  CircularProgress,
+} from '@mui/material';
 import { useBoardStore } from '../store/BoardStore';
-import { useQuery } from 'react-query';
-import useBoardList, { fetchBoardList } from '../api/BoardApi';
-import { Board } from '../entity/Board';
+import useBoardListQuery, { fetchBoardList } from '../api/BoardApi';
+
+import { Link, useNavigate } from 'react-router-dom';
 
 const BoardListPage = () => {
-  const { data: boards, isLoading, isError } = useBoardList();
+  const { data: boards, isLoading, isError } = useBoardListQuery();
   const setBoards = useBoardStore((state) => state.setBoards);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (boards) {
@@ -71,16 +84,24 @@ const BoardListPage = () => {
     return <Typography>No data available</Typography>;
   }
 
+  const handleRowClick = (boardId: number) => {
+    navigate(`/read/${boardId}`);
+  };
+
   // 만약 Response에 맞춰서 interface를 구성한다면 아래와 같은 구성도 가능
   const columnCount: number = 3
 
   return (
     <Container maxWidth="lg">
+      <Button component={Link} to="/register" variant="contained"
+              color="primary" style={{ marginTop: '20px' }}>
+        글쓰기
+      </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="board table">
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
+              <TableCell style={{ width: '50%' }}>Title</TableCell>
               <TableCell align="right">Writer</TableCell>
               <TableCell align="right">Create Date</TableCell>
             </TableRow>
@@ -92,10 +113,8 @@ const BoardListPage = () => {
               </TableRow>
             ) : (
               boards && boards.map((board) => (
-                <TableRow key={board.boardId}>
-                  <TableCell component="th" scope="row">
-                    {board.title}
-                  </TableCell>
+                <TableRow key={board.boardId} onClick={() => handleRowClick(board.boardId)} style={{ cursor: 'pointer' }}>
+                  <TableCell>{board.title}</TableCell>
                   <TableCell align="right">{board.writer}</TableCell>
                   <TableCell align="right">{board.createDate}</TableCell>
                 </TableRow>
