@@ -31,11 +31,14 @@ module.exports = (_, argv) => ({
         use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
-        test: /\.(ts|tsx|js|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
-        },
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react', '@babel/preset-typescript']
+          }
+        }
       },
     ],
   },
