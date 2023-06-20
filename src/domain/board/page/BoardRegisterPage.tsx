@@ -2,11 +2,13 @@ import React from 'react';
 import { TextField, Button, Box, Container, OutlinedInput } from '@mui/material';
 import { useMutation } from 'react-query';
 import { registerBoard } from '../api/BoardApi';
+import { useNavigate } from 'react-router-dom';
 
 const BoardRegisterPage: React.FC = () => {
+    const navigate = useNavigate();
     const mutation = useMutation(registerBoard);
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         const target = event.target as typeof event.target & {
@@ -25,7 +27,8 @@ const BoardRegisterPage: React.FC = () => {
             content: content.value,
         };
 
-        mutation.mutate(data);
+        const board = await mutation.mutateAsync(data);
+        navigate(`/read/${board.boardId}`);
     };
 
     return (

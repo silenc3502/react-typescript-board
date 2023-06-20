@@ -20,12 +20,24 @@ const useBoardListQuery = (): UseQueryResult<Board[], unknown> => {
   return queryResult;
 };
 
-export const registerBoard = async (data: { title: string; writer: string; content: string }): Promise<void> => {
-  await springAxiosInst.post('/jpa-board/register', data);
+export const registerBoard = async (
+    data: { title: string; writer: string; content: string }
+): Promise<Board> => {
+  const response = await springAxiosInst.post<Board>('/jpa-board/register', data);
+  return response.data;
 };
 
-export const useBoardRegisterMutation = (): UseMutationResult<void, unknown, { title: string; writer: string; content: string }> => {
+export const useBoardRegisterMutation = (): UseMutationResult<Board, unknown, { title: string; writer: string; content: string }> => {
   return useMutation(registerBoard);
+};
+
+export const fetchBoard = async (boardId: string): Promise<Board | null> => {
+  const response = await springAxiosInst.get<Board>(`/jpa-board/${boardId}`);
+  return response.data;
+};
+
+export const useBoard = (boardId: string): UseQueryResult<Board | null, unknown> => {
+  return useQuery(['board', boardId], () => fetchBoard(boardId));
 };
 
 export default useBoardListQuery;

@@ -67,10 +67,14 @@ const BoardListPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (boards) {
-      setBoards(boards);
-    }
-  }, [boards, setBoards]);
+    const fetchData = async () => {
+      const data = await fetchBoardList();
+      console.log(data)
+      setBoards(data);
+    };
+
+    fetchData();
+  }, [setBoards]);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -90,6 +94,10 @@ const BoardListPage = () => {
 
   // 만약 Response에 맞춰서 interface를 구성한다면 아래와 같은 구성도 가능
   const columnCount: number = 3
+
+  if (boards === null) {
+    return <CircularProgress />;
+  }
 
   return (
     <Container maxWidth="lg">
