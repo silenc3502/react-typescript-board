@@ -5,6 +5,7 @@ import LazyLoad from './LazyLoad';
 import BoardListPage from '../domain/board/page/BoardListPage';
 import BoardRegisterPage from "../domain/board/page/BoardRegisterPage";
 import BoardReadPage from "../domain/board/page/BoardReadPage";
+import BoardModifyPage from '../domain/board/page/BoardModifyPage';
 
 const MainRouters = () => {
     return (
@@ -17,6 +18,8 @@ const MainRouters = () => {
                     <Route path="/register" element={<BoardRegisterPage />} />
                     {/* 게시판 상세 페이지 */}
                     <Route path="/read/:boardId" element={<BoardReadPage />} />
+                    {/* 게시판 수정 페이지 */}
+                    <Route path="/modify/:boardId" element={<BoardModifyPage />} />
                 </Routes>
             </Suspense>
         </>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Container, TextField, Button } from '@mui/material';
-import { useBoard } from '../api/BoardApi';
+import { fetchBoard, useBoard } from '../api/BoardApi';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 interface RouteParams {
     boardId: string;
@@ -16,8 +16,17 @@ const BoardReadPage: React.FC = () => {
 
     const { data: board, isLoading, isError } = useBoard(boardId || '');
 
+    useEffect(() => {
+        const fetchBoardData = async () => {
+            const data = await fetchBoard(boardId || '');
+            console.log(data);
+        };
+
+        fetchBoardData();
+    }, [boardId]);
+
     const handleEditClick = () => {
-        navigate(`/register/${boardId}`);
+        navigate(`/modify/${boardId}`);
     };
 
     const handleCancelClick = () => {
