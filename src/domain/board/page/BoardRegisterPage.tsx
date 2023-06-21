@@ -1,12 +1,18 @@
 import React from 'react';
 import { TextField, Button, Box, Container, OutlinedInput } from '@mui/material';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { registerBoard } from '../api/BoardApi';
 import { useNavigate } from 'react-router-dom';
 
 const BoardRegisterPage: React.FC = () => {
     const navigate = useNavigate();
-    const mutation = useMutation(registerBoard);
+    const queryClient = useQueryClient();
+    const mutation = useMutation(registerBoard, {
+        onSuccess: (data) => {
+            queryClient.setQueryData('board', data); // 데이터 갱신
+            navigate(`/read/${data.boardId}`); // BoardReadPage로 이동
+        },
+    });
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -28,7 +34,7 @@ const BoardRegisterPage: React.FC = () => {
         };
 
         const board = await mutation.mutateAsync(data);
-        navigate(`/read/${board.boardId}`);
+        //navigate(`/read/${board.boardId}`);
     };
 
     return (

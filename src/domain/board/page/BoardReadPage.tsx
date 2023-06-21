@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Container, TextField, Button } from '@mui/material';
 import { useBoard } from '../api/BoardApi';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 
 interface RouteParams {
     boardId: string;
@@ -11,6 +12,7 @@ interface RouteParams {
 const BoardReadPage: React.FC = () => {
     const navigate = useNavigate();
     const { boardId } = useParams<RouteParams>();
+    const queryClient = useQueryClient();
 
     const { data: board, isLoading, isError } = useBoard(boardId || '');
 
@@ -19,6 +21,7 @@ const BoardReadPage: React.FC = () => {
     };
 
     const handleCancelClick = () => {
+        queryClient.invalidateQueries('boardList'); // 'boardList' 쿼리 무효화
         navigate('/');
     };
 
